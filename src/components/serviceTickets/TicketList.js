@@ -8,6 +8,7 @@ import "./Tickets.css"
 export const TicketList = () => {
   const [active, setActive] = useState("")
   const [tickets, setTickets] = useState([])
+  const [searchTicket, setSearchTicket] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -24,9 +25,15 @@ export const TicketList = () => {
     }
   }, [tickets])
 
+  const searchTickets = (event) => {
+    const lowerCase = event.target.value.toLowerCase()
+    setSearchTicket(lowerCase)
+    filterTickets(`search_query'--${lowerCase}`)
+  }
+
   const toShowOrNotToShowTheButton = () => {
     if (isStaff()) {
-      return ""
+      return <input type='text' placeholder='Search Tickets' onChange={searchTickets} />
     }
     else {
       return <button className="actions__create"
@@ -42,6 +49,8 @@ export const TicketList = () => {
     <div>
       <button onClick={() => filterTickets("done")}>Show Done</button>
       <button onClick={() => filterTickets("all")}>Show All</button>
+      <button onClick={() => filterTickets("unclaimed")}>Show Unclaimed</button>
+      <button onClick={() => filterTickets("inprogress")}>Show In Progress</button>
     </div>
     <div className="actions">{toShowOrNotToShowTheButton()}</div>
     <div className="activeTickets">{active}</div>

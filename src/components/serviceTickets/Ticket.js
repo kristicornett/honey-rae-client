@@ -41,6 +41,16 @@ export const Ticket = () => {
     updateTicket(updatedTicket).then(() => fetchTicket())
   }
 
+  const closeTicket = () => {
+    const updatedTicket ={
+      ...ticket,
+      employee: ticket.employee.id,
+      date_completed: new Date().toISOString().split('T')[0]
+    }
+    updateTicket(updatedTicket)
+    .then(() => fetchTicket())
+  }
+
   const ticketStatus = () => {
     if (ticket.date_completed === null) {
       if (ticket.employee) {
@@ -48,7 +58,7 @@ export const Ticket = () => {
       }
       return <span className="status--new">Unclaimed</span>
     }
-    return <span className="status--completed">Done</span>
+    return <span className="status--completed">Complete</span>
   }
 
   const employeePicker = () => {
@@ -90,7 +100,9 @@ export const Ticket = () => {
           </div>
           {
             isStaff()
-              ? <></>
+              ? ticket.date_completed === null
+                ? <button type="button" onClick={closeTicket}>Done</button>
+                : <></>
               : <button onClick={deleteTicketEvent}>Delete</button>
           }
         </footer>
